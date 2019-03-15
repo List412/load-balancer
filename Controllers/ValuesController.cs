@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace load_balancer.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("status")]
+//    [ApiController]
     public class ValuesController : ControllerBase
     {
+        
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -17,12 +18,6 @@ namespace load_balancer.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/values
         [HttpPost]
