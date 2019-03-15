@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using load_balancer.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -23,6 +25,16 @@ namespace load_balancer.MongoDb
         {
             Collection.InsertOne(server);
             return server.Id;
+        }
+
+        public List<Server> GetAll()
+        {
+            return Collection.Find(_ => true).ToList();
+        }
+
+        public Server Get(ObjectId id)
+        {
+            return Collection.Find(x => x.Id == id).ToList().First();
         }
         
         //TODO Get, GetAll, Delete

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http.Cors;
 using load_balancer.Models;
 using load_balancer.MongoDb;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using MongoDB.Driver;
 
 namespace load_balancer.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [Route("api/{*url}")]
     [ApiController]
     public class ServerController : ControllerBase
@@ -20,6 +22,7 @@ namespace load_balancer.Controllers
         {
             db = new Db().Collection;
             _http = new HttpClient();
+            _http.DefaultRequestHeaders.Add("Access-Control-Allow-Origin","*");
         }
         
         // GET api/any

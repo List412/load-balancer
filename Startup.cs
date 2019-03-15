@@ -15,6 +15,9 @@ namespace load_balancer
 {
     public class Startup
     {
+        
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +28,16 @@ namespace load_balancer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("*");
+                    });
+            });
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -39,6 +52,8 @@ namespace load_balancer
             {
                 app.UseHsts();
             }
+            
+            app.UseCors(MyAllowSpecificOrigins); 
 
             app.UseHttpsRedirection();
             app.UseMvc();
