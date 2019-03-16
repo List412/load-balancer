@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http.Cors;
 using load_balancer.Models;
@@ -40,9 +42,12 @@ namespace load_balancer.Controllers
 
         // POST status
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Produces("application/json")]
+        public ObjectId Post([FromBody] Host host)
         {
-            
+            var server = new Server(host.host);
+            var id = _db.Add(server);
+            return id;
         }
 
         // PUT status/5
@@ -53,8 +58,14 @@ namespace load_balancer.Controllers
 
         // DELETE status/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
+            _db.Delete(new ObjectId(id));
         }
     }
+}
+
+public class Host
+{
+    public string host { get; set; }
 }

@@ -34,7 +34,8 @@ namespace load_balancer
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("*");
+                        builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+                        
                     });
             });
             
@@ -54,7 +55,7 @@ namespace load_balancer
             }
             
             app.UseCors(MyAllowSpecificOrigins); 
-
+            
             app.UseHttpsRedirection();
             app.UseMvc();
         }

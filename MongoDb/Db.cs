@@ -36,6 +36,11 @@ namespace load_balancer.MongoDb
         {
             return Collection.Find(x => x.Id == id).ToList().First();
         }
+
+        public void Delete(ObjectId id)
+        {
+            Collection.DeleteOne(x => x.Id == id);
+        }
         
         //TODO Get, GetAll, Delete
     }
