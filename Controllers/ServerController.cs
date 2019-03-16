@@ -31,7 +31,15 @@ namespace load_balancer.Controllers
         {
             var server = GetServer();
             var newPath = server.Address + Request.Path;
+            
             server.AddWork(newPath);
+
+            if (Request.Path == "/api/server")
+            {
+                server.RemoveWork(newPath);
+                return server.Address.ToJson();
+            }
+            
             var result = await _http.GetAsync(newPath);
             server.RemoveWork(newPath);
             return result.Content.ReadAsStringAsync().Result.ToJson();
@@ -39,21 +47,22 @@ namespace load_balancer.Controllers
 
         // POST api/any
         [HttpPost]
-        public async Task<string> Post([FromBody] string value)
+        public async Task<string> Post(PictureJson file)
         {
             var server = GetServer();
             var newPath = server.Address + Request.Path;
             server.AddWork(newPath);
-            var result = await _http.PostAsJsonAsync(newPath, value);
+
+            var result = _http.PostAsJsonAsync(newPath, file);
             server.RemoveWork(newPath);
-            return result.Content.ReadAsStringAsync().Result.ToJson();
+            return result.ToJson();
         }
 
         // PUT api/any/5
         [HttpPut()]
         public void Put([FromBody] string value)
         {
-            // TODO preg math last number from Request.Path and send it to real api
+            
         }
 
         // DELETE api/any/5
@@ -72,4 +81,10 @@ namespace load_balancer.Controllers
                 return new Server("https://127.0.0.1:5001");
         }
     }
+}
+
+public class PictureJson
+{
+    public string Name { get; set; }
+    public string File { get; set; }
 }
